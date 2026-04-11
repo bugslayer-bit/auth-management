@@ -6996,13 +6996,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"accept-language-parser@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "accept-language-parser@npm:1.5.0"
-  checksum: 10c0/d736afcd9e47eef82b821c2548c114882f41498c68f43a2223fe1800b4bed7524fc3ad72e16d0f70e0ffc90ef006ac8e2f74df27532e8aecbd4699834949aea1
-  languageName: node
-  linkType: hard
-
 "accepts@npm:^2.0.0":
   version: 2.0.0
   resolution: "accepts@npm:2.0.0"
@@ -7569,7 +7562,6 @@ __metadata:
     mime-types: "npm:^3.0.1"
     morgan: "npm:^1.10.0"
     nestjs-cls: "npm:^5.4.3"
-    nestjs-i18n: "npm:^10.5.1"
     parse-duration: "npm:^2.1.4"
     passport: "npm:^0.7.0"
     passport-jwt: "npm:^4.0.1"
@@ -8698,7 +8690,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookie@npm:^0.7.0, cookie@npm:^0.7.1":
+"cookie@npm:^0.7.1":
   version: 0.7.2
   resolution: "cookie@npm:0.7.2"
   checksum: 10c0/9596e8ccdbf1a3a88ae02cf5ee80c1c50959423e1022e4e60b91dd87c622af1da309253d8abdb258fb5e3eacb4f08e579dc58b4897b8087574eee0fd35dfa5d2
@@ -12404,7 +12396,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iterare@npm:1.2.1, iterare@npm:^1.2.1":
+"iterare@npm:1.2.1":
   version: 1.2.1
   resolution: "iterare@npm:1.2.1"
   checksum: 10c0/02667d486e3e83ead028ba8484d927498c2ceab7e8c6a69dd881fd02abc4114f00b13abb36b592252fbb578b6e6f99ca1dfc2835408b9158c9a112a9964f453f
@@ -14014,25 +14006,6 @@ __metadata:
     reflect-metadata: "*"
     rxjs: ">= 7"
   checksum: 10c0/bc6086bc1237ef0d67bcccd8bc5f1a7ae76c5acb6cde38878de984159916972b61970b2577fc0d7b1cece2a9f3f9a6d2871aa19b497e85e748c1ede0b13cec75
-  languageName: node
-  linkType: hard
-
-"nestjs-i18n@npm:^10.5.1":
-  version: 10.5.1
-  resolution: "nestjs-i18n@npm:10.5.1"
-  dependencies:
-    accept-language-parser: "npm:^1.5.0"
-    chokidar: "npm:^3.6.0"
-    cookie: "npm:^0.7.0"
-    iterare: "npm:^1.2.1"
-    js-yaml: "npm:^4.1.0"
-    string-format: "npm:^2.0.0"
-  peerDependencies:
-    "@nestjs/common": "*"
-    "@nestjs/core": "*"
-    class-validator: "*"
-    rxjs: "*"
-  checksum: 10c0/799aa310146702966adfd42ad3c11b4935dc99f7e0f25268bf16945038f3613701298f1beca27fc7abad9dfb42020d134ce244dc976e43d642a09cddb342b116
   languageName: node
   linkType: hard
 
@@ -16644,13 +16617,6 @@ __metadata:
   version: 0.3.2
   resolution: "string-argv@npm:0.3.2"
   checksum: 10c0/75c02a83759ad1722e040b86823909d9a2fc75d15dd71ec4b537c3560746e33b5f5a07f7332d1e3f88319909f82190843aa2f0a0d8c8d591ec08e93d5b8dec82
-  languageName: node
-  linkType: hard
-
-"string-format@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "string-format@npm:2.0.0"
-  checksum: 10c0/7bca13ba9f942f635c74d637da5e9e375435cbd428f35eeef28c3a30f81d4e63b95ff2c6cca907d897dd3951bbf52e03e3b945a0e9681358e33bd67222436538
   languageName: node
   linkType: hard
 

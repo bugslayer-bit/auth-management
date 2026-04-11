@@ -27,17 +27,10 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
     new ExpressAdapter(),
-    {
-      cors: {
-        origin: process.env.CORS_ORIGINS?.split(',') || ['http://localhost:3000'],
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-        credentials: true,
-      }
-    },
   );
   app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
   app.use(helmet());
-  // app.setGlobalPrefix('/api'); use api as global prefix if you don't have subdomain
+  app.setGlobalPrefix('/svc/auth/api'); 
   app.use(compression());
   app.use(morgan('combined'));
   app.enableVersioning();
@@ -72,8 +65,8 @@ export async function bootstrap(): Promise<NestExpressApplication> {
     app.connectMicroservice({
       transport: Transport.NATS,
       options: {
-        url: `nats://${natsConfig.host}:${natsConfig.port}`,
-        queue: 'main_service',
+        servers: [`nats://${natsConfig.host}:${natsConfig.port}`],
+        queue: 'AUTH_SERVICE',
       },
     });
 
