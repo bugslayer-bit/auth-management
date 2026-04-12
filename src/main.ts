@@ -28,8 +28,12 @@ export async function bootstrap(): Promise<NestExpressApplication> {
     AppModule,
     new ExpressAdapter(),
   );
-  app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+  app.enable('trust proxy');
   app.use(helmet());
+  app.enableCors({
+    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    credentials: true,
+  });
   app.setGlobalPrefix('/svc/auth/api'); 
   app.use(compression());
   app.use(morgan('combined'));

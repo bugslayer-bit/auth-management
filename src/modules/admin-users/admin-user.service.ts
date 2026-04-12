@@ -45,7 +45,7 @@ export class AdminUserService {
       );
     }
 
-    return entity;
+    return this.getAdminUser(entity.id);
   }
 
   async getAdminUsers(

@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -38,7 +39,7 @@ export class RoleController {
   @Auth([RoleType.ADMIN])
   @HttpCode(HttpStatus.OK)
   getRoles(
-    @Query() pageOptionsDto: RolesPageOptionsDto,
+    @Query(new ValidationPipe({ transform: true })) pageOptionsDto: RolesPageOptionsDto,
   ): Promise<PageDto<RoleDto>> {
     return this.roleService.getRoles(pageOptionsDto);
   }
@@ -54,7 +55,7 @@ export class RoleController {
 
   @Patch(':id')
   @Auth([RoleType.ADMIN])
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.NO_CONTENT)
   updateRole(
     @UUIDParam('id') id: Uuid,
     @Body() updateRoleDto: UpdateRoleDto,

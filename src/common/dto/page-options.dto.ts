@@ -16,7 +16,7 @@ export class PageOptionsDto {
     default: 1,
     int: true,
   })
-  readonly page!: number;
+  readonly page: number = 1;
 
   @NumberFieldOptional({
     minimum: 1,
@@ -24,10 +24,10 @@ export class PageOptionsDto {
     default: 10,
     int: true,
   })
-  readonly take!: number;
+  readonly take: number = 10;
 
   get skip(): number {
-    return (this.page - 1) * this.take;
+    return ((this.page || 1) - 1) * (this.take || 10);
   }
 
   @StringFieldOptional()

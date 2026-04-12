@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -41,7 +42,7 @@ export class PermissionController {
   @Auth([RoleType.ADMIN])
   @HttpCode(HttpStatus.OK)
   getPermissions(
-    @Query() pageOptionsDto: PermissionsPageOptionsDto,
+    @Query(new ValidationPipe({ transform: true })) pageOptionsDto: PermissionsPageOptionsDto,
   ): Promise<PageDto<PermissionDto>> {
     return this.permissionService.getPermissions(pageOptionsDto);
   }
@@ -57,7 +58,7 @@ export class PermissionController {
 
   @Patch(':id')
   @Auth([RoleType.ADMIN])
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.NO_CONTENT)
   updatePermission(
     @UUIDParam('id') id: Uuid,
     @Body() updatePermissionDto: UpdatePermissionDto,

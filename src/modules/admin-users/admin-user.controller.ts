@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  ValidationPipe,
 } from '@nestjs/common';
 
 import type { PageDto } from '../../common/dto/page.dto';
@@ -35,7 +36,7 @@ async createAdminUser(@Body() createAdminUserDto: CreateAdminUserDto) {
 @Get()
 @Auth([RoleType.ADMIN])
 @HttpCode(HttpStatus.OK)
-getAdminUsers(@Query() adminUserPageOptionsDto: AdminUserPageOptionsDto): Promise<PageDto<AdminUserDto>> {
+getAdminUsers(@Query(new ValidationPipe({ transform: true })) adminUserPageOptionsDto: AdminUserPageOptionsDto): Promise<PageDto<AdminUserDto>> {
   return this.adminUserService.getAdminUsers(adminUserPageOptionsDto);
 }
 
@@ -50,7 +51,7 @@ async getAdminUser(@UUIDParam('id') id: Uuid): Promise<AdminUserDto> {
 
 @Patch(':id')
 @Auth([RoleType.ADMIN])
-@HttpCode(HttpStatus.ACCEPTED)
+@HttpCode(HttpStatus.NO_CONTENT)
 updateAdminUser(
 @UUIDParam('id') id: Uuid,
   @Body() updateAdminUserDto: UpdateAdminUserDto,
@@ -60,7 +61,7 @@ updateAdminUser(
 
 @Delete(':id')
 @Auth([RoleType.ADMIN])
-@HttpCode(HttpStatus.ACCEPTED)
+@HttpCode(HttpStatus.NO_CONTENT)
 async deleteAdminUser(@UUIDParam('id') id: Uuid): Promise<void> {
   await this.adminUserService.deleteAdminUser(id);
 }

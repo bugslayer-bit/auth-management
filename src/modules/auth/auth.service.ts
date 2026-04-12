@@ -80,6 +80,9 @@ export class AuthService {
       throw new AdminUserNotFoundException();
     }
 
+    user!.lastLoggedIn = new Date();
+    await this.adminUserRepository.save(user!);
+
     return user!;
   }
 
