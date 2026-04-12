@@ -22,7 +22,7 @@ export class AdminUserDto extends AbstractDto {
   username?: string | null;
 
   @EnumField(() => RoleType)
-  role!: RoleType;
+  roleType!: RoleType;
 
   @EmailFieldOptional({ nullable: true })
   email?: string | null;
@@ -46,7 +46,7 @@ export class AdminUserDto extends AbstractDto {
     super(adminUser);
     this.name = adminUser.name;
     this.username = adminUser.username;
-    this.role = adminUser.role;
+    this.roleType = adminUser.roleType;
     this.email = adminUser.email;
     this.contactNo = adminUser.contactNo;
     this.division = adminUser.division;

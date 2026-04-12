@@ -2,9 +2,9 @@ import {
   StringField,
 } from '../../../decorators/field.decorators.ts';
 
-export class UserLoginDto {
+export class AdminLoginDto {
   @StringField()
-  readonly cidNumber!: string;
+  readonly username!: string;
 
   @StringField()
   readonly password!: string;

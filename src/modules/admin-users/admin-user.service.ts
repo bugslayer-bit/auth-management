@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In, Repository, type FindOptionsWhere } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { PageDto } from '../../common/dto/page.dto.ts';
@@ -23,6 +23,11 @@ export class AdminUserService {
     private roleRepository: Repository<RoleEntity>,
     private commandBus: CommandBus,
   ) {}
+
+
+  findOne(findData: FindOptionsWhere<AdminUserEntity>): Promise<AdminUserEntity | null> {
+      return this.adminUserRepository.findOneBy(findData);
+    }
 
   @Transactional()
   createAdminUser(

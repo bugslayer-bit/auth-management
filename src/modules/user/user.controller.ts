@@ -1,12 +1,14 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
   HttpStatus,
+  Post,
   Query,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { PageDto } from '../../common/dto/page.dto.ts';
 import { RoleType } from '../../constants/role-type.ts';
@@ -17,6 +19,7 @@ import {
   Auth,
   UUIDParam,
 } from '../../decorators/http.decorators.ts';
+import { CreateUserDto } from './dtos/create-user.dto.ts';
 import { UserDto } from './dtos/user.dto.ts';
 import type { UsersPageOptionsDto } from './dtos/users-page-options.dto.ts';
 import { UserEntity } from './user.entity.ts';
@@ -29,11 +32,19 @@ export class UserController {
     private userService: UserService,
   ) {}
 
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOkResponse({ type: UserDto, description: 'User created successfully' })
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<UserDto> {
+    const entity = await this.userService.createUser(createUserDto);
+
+    return entity.toDto();
+  }
+
   @Get('admin')
   @Auth([RoleType.USER])
   @HttpCode(HttpStatus.OK)
   async admin(@AuthUser() user: UserEntity) {
-
     return {
       text: `${user.name}`,
     };

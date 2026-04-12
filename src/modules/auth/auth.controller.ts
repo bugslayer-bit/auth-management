@@ -1,24 +1,20 @@
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Post,
-  Version,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
-import { RoleType } from '../../constants/role-type.ts';
-import { AuthUser } from '../../decorators/auth-user.decorator.ts';
-import { Auth } from '../../decorators/http.decorators.ts';
 import { UserDto } from '../user/dtos/user.dto.ts';
-import type { UserEntity } from '../user/user.entity.ts';
 import { UserService } from '../user/user.service.ts';
 import { AuthService } from './auth.service.ts';
 import { LoginPayloadDto } from './dto/login-payload.dto.ts';
-import type { UserLoginDto } from './dto/user-login.dto.ts';
-import type { UserRegisterDto } from './dto/user-register.dto.ts';
+import { UserLoginDto } from './dto/user-login.dto.ts';
+import { UserRegisterDto } from './dto/user-register.dto.ts';
+import { AdminLoginDto } from './dto/admin-login.dto.ts';
+import { AdminLoginPayloadDto } from './dto/admin-login-payload.dto.ts';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -47,6 +43,25 @@ export class AuthController {
     return new LoginPayloadDto(userEntity.toDto(), token);
   }
 
+  @Post('admin/login')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: AdminLoginPayloadDto,
+    description: 'User info with access token',
+  })
+  async adminUserLogin(
+    @Body() adminLoginDto: AdminLoginDto,
+  ): Promise<AdminLoginPayloadDto> {
+    const userEntity = await this.authService.validateAdminUser(adminLoginDto);
+
+    const token = await this.authService.createAccessToken({
+      userId: userEntity.id,
+      role: userEntity.roleType,
+    });
+
+    return new AdminLoginPayloadDto(userEntity.toDto(), token);
+  }
+
   @Post('register')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: UserDto, description: 'Successfully Registered' })
@@ -56,14 +71,5 @@ export class AuthController {
     const createdUser = await this.userService.createUser(userRegisterDto);
 
     return createdUser.toDto();
-  }
-
-  @Version('1')
-  @Get('me')
-  @HttpCode(HttpStatus.OK)
-  @Auth([RoleType.USER, RoleType.ADMIN])
-  @ApiOkResponse({ type: UserDto, description: 'current user info' })
-  getCurrentUser(@AuthUser() user: UserEntity): UserDto {
-    return user.toDto();
   }
 }

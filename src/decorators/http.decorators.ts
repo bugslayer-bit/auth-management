@@ -3,6 +3,7 @@ import {
   applyDecorators,
   Param,
   ParseUUIDPipe,
+  SetMetadata,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -18,7 +19,6 @@ import { AuthGuard } from '../guards/auth.guard.ts';
 import { RolesGuard } from '../guards/roles.guard.ts';
 import { AuthUserInterceptor } from '../interceptors/auth-user-interceptor.service.ts';
 import { PublicRoute } from './public-route.decorator.ts';
-import { Roles } from './roles.decorator.ts';
 
 export function Auth(
   roles: RoleType[] = [],
@@ -27,7 +27,7 @@ export function Auth(
   const isPublicRoute = options?.public;
 
   return applyDecorators(
-    Roles(roles),
+    SetMetadata('roles', roles),
     UseGuards(AuthGuard({ public: isPublicRoute }), RolesGuard),
     ApiBearerAuth(),
     UseInterceptors(AuthUserInterceptor),

@@ -8,10 +8,12 @@ import { AuthController } from './auth.controller.ts';
 import { AuthService } from './auth.service.ts';
 import { JwtStrategy } from './jwt.strategy.ts';
 import { PublicStrategy } from './public.strategy.ts';
+import { AdminUserModule } from '../../modules/admin-users/admin-user.module.ts';
 
 @Module({
   imports: [
     forwardRef(() => UserModule),
+    forwardRef(() => AdminUserModule),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       useFactory: (configService: ApiConfigService) => ({

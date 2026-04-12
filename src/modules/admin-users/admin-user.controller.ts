@@ -5,8 +5,8 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
-  Put,
   Query,
 } from '@nestjs/common';
 
@@ -17,13 +17,14 @@ import { AdminUserPageOptionsDto } from './dto/admin-user-page-options.dto.ts';
 import { UpdateAdminUserDto } from './dto/update-admin-user.dto.ts';
 import { AdminUserService } from './admin-user.service.ts';
 import { Auth, UUIDParam } from '../../decorators/http.decorators.ts';
+import { RoleType } from '../../constants/role-type.ts';
 
 @Controller('admin-users')
 export class AdminUserController {
   constructor(private adminUserService: AdminUserService) {}
 
 @Post()
-// @Auth([])
+@Auth([RoleType.ADMIN])
 @HttpCode(HttpStatus.CREATED)
 async createAdminUser(@Body() createAdminUserDto: CreateAdminUserDto) {
   const entity = await this.adminUserService.createAdminUser(createAdminUserDto);
@@ -32,14 +33,14 @@ async createAdminUser(@Body() createAdminUserDto: CreateAdminUserDto) {
 }
 
 @Get()
-@Auth([])
+@Auth([RoleType.ADMIN])
 @HttpCode(HttpStatus.OK)
 getAdminUsers(@Query() adminUserPageOptionsDto: AdminUserPageOptionsDto): Promise<PageDto<AdminUserDto>> {
   return this.adminUserService.getAdminUsers(adminUserPageOptionsDto);
 }
 
 @Get(':id')
-@Auth([])
+@Auth([RoleType.ADMIN])
 @HttpCode(HttpStatus.OK)
 async getAdminUser(@UUIDParam('id') id: Uuid): Promise<AdminUserDto> {
   const entity = await this.adminUserService.getAdminUser(id);
@@ -47,7 +48,8 @@ async getAdminUser(@UUIDParam('id') id: Uuid): Promise<AdminUserDto> {
   return entity.toDto();
 }
 
-@Put(':id')
+@Patch(':id')
+@Auth([RoleType.ADMIN])
 @HttpCode(HttpStatus.ACCEPTED)
 updateAdminUser(
 @UUIDParam('id') id: Uuid,
@@ -57,6 +59,7 @@ updateAdminUser(
 }
 
 @Delete(':id')
+@Auth([RoleType.ADMIN])
 @HttpCode(HttpStatus.ACCEPTED)
 async deleteAdminUser(@UUIDParam('id') id: Uuid): Promise<void> {
   await this.adminUserService.deleteAdminUser(id);

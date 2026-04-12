@@ -18,7 +18,7 @@ export class CreateAdminUsersTable1775920764202 implements MigrationInterface {
         "updated_at" TIMESTAMP         NOT NULL DEFAULT now(),
         "name" character varying,
         "username"  character varying,
-        "role"       "admin_users_role_enum" NOT NULL DEFAULT 'ADMIN',
+        "role_type"  "admin_users_role_enum" NOT NULL DEFAULT 'ADMIN',
         "email"      character varying,
         "password"   character varying,
         "contact_no"      character varying,

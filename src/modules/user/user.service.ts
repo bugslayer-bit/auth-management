@@ -6,6 +6,7 @@ import { Transactional } from 'typeorm-transactional';
 import type { PageDto } from '../../common/dto/page.dto.ts';
 import { UserNotFoundException } from '../../exceptions/user-not-found.exception.ts';
 import type { UserRegisterDto } from '../auth/dto/user-register.dto.ts';
+import type { CreateUserDto } from './dtos/create-user.dto.ts';
 import type { UserDto } from './dtos/user.dto.ts';
 import type { UsersPageOptionsDto } from './dtos/users-page-options.dto.ts';
 import { UserEntity } from './user.entity.ts';
@@ -26,8 +27,10 @@ export class UserService {
   }
 
   @Transactional()
-  async createUser(userRegisterDto: UserRegisterDto): Promise<UserEntity> {
-    const user = this.userRepository.create(userRegisterDto);
+  async createUser(
+    createUserDto: CreateUserDto | UserRegisterDto,
+  ): Promise<UserEntity> {
+    const user = this.userRepository.create(createUserDto);
 
     await this.userRepository.save(user);
 

@@ -10,6 +10,10 @@ import { UserEntity } from '../user/user.entity.ts';
 import { UserService } from '../user/user.service.ts';
 import { TokenPayloadDto } from './dto/token-payload.dto.ts';
 import type { UserLoginDto } from './dto/user-login.dto.ts';
+import type { AdminLoginDto } from './dto/admin-login.dto.ts';
+import { AdminUserNotFoundException } from '../../modules/admin-users/exceptions/admin-user-not-found.exception.ts';
+import { AdminUserService } from '../../modules/admin-users/admin-user.service.ts';
+import { AdminUserEntity } from '../../modules/admin-users/admin-user.entity.ts';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +21,7 @@ export class AuthService {
     private jwtService: JwtService,
     private configService: ApiConfigService,
     private userService: UserService,
+    private adminUserService: AdminUserService,
   ) {}
 
   async createAccessToken(data: {
@@ -35,7 +40,7 @@ export class AuthService {
 
   async validateUser(userLoginDto: UserLoginDto): Promise<UserEntity> {
     const user = await this.userService.findOne({
-      email: userLoginDto.email,
+      cidNumber: userLoginDto.cidNumber,
     });
 
     const isPasswordValid = await validateHash(
@@ -45,6 +50,22 @@ export class AuthService {
 
     if (!isPasswordValid) {
       throw new UserNotFoundException();
+    }
+
+    return user!;
+  }
+
+  async validateAdminUser(adminLoginDto: AdminLoginDto): Promise<AdminUserEntity> {
+    const user = await this.adminUserService.findOne({
+      username: adminLoginDto.username,
+    });
+    const isPasswordValid = await validateHash(
+      adminLoginDto.password,
+      user?.password,
+    );
+
+    if (!isPasswordValid) {
+      throw new AdminUserNotFoundException();
     }
 
     return user!;

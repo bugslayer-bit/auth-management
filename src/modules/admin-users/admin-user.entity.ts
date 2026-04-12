@@ -20,7 +20,7 @@ export class AdminUserEntity extends AbstractEntity<
   username!: string | null;
 
   @Column({ type: 'enum', enum: RoleType, default: RoleType.ADMIN })
-  role!: RoleType;
+  roleType!: RoleType;
 
   @Column({ type: 'varchar', unique: true, nullable: true })
   email!: string | null;
