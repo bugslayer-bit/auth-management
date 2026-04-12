@@ -5,12 +5,14 @@ import { CqrsModule } from '@nestjs/cqrs';
 
 import { ApiConfigService } from './services/api-config.service.ts';
 import { GeneratorService } from './services/generator.service.ts';
+import { MailService } from './services/mail.service.ts';
 import { ValidatorService } from './services/validator.service.ts';
 
 const providers: Provider[] = [
   ApiConfigService,
   ValidatorService,
   GeneratorService,
+  MailService,
 ];
 
 @Global()

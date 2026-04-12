@@ -24,6 +24,8 @@ export class CreateAdminUsersTable1775920764202 implements MigrationInterface {
         "contact_no"      character varying,
         "division"     character varying,
         "last_logged_in" TIMESTAMP,
+        "reset_token"  character varying,
+        "reset_token_expiry" TIMESTAMP,
         "status"       "status_enum" NOT NULL DEFAULT 'ACTIVE',
         CONSTRAINT "UQ_admin_users_email" UNIQUE ("email"),
         CONSTRAINT "PK_admin_users_id" PRIMARY KEY ("id")

@@ -37,6 +37,12 @@ export class AdminUserEntity extends AbstractEntity<
   @Column({ type: 'timestamp', nullable: true })
   lastLoggedIn!: Date | null;
 
+  @Column({ type: 'varchar', nullable: true })
+  resetToken!: string | null;
+
+  @Column({ type: 'timestamp', nullable: true })
+  resetTokenExpiry!: Date | null;
+
   @Column({ type: 'enum', enum: UserStatus, default: UserStatus.ACTIVE })
   status!: UserStatus;
 

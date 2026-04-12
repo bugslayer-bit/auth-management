@@ -1,19 +1,22 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ApiConfigService } from '../../shared/services/api-config.service.ts';
+import { AdminUserEntity } from '../admin-users/admin-user.entity.ts';
+import { AdminUserModule } from '../admin-users/admin-user.module.ts';
 import { UserModule } from '../user/user.module.ts';
 import { AuthController } from './auth.controller.ts';
 import { AuthService } from './auth.service.ts';
 import { JwtStrategy } from './jwt.strategy.ts';
 import { PublicStrategy } from './public.strategy.ts';
-import { AdminUserModule } from '../../modules/admin-users/admin-user.module.ts';
 
 @Module({
   imports: [
     forwardRef(() => UserModule),
     forwardRef(() => AdminUserModule),
+    TypeOrmModule.forFeature([AdminUserEntity]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       useFactory: (configService: ApiConfigService) => ({
