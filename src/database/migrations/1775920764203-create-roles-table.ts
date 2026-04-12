@@ -9,7 +9,7 @@ export class CreateRolesTable1775920764203 implements MigrationInterface {
         "created_at"  TIMESTAMP         NOT NULL DEFAULT now(),
         "updated_at"  TIMESTAMP         NOT NULL DEFAULT now(),
         "name"        character varying NOT NULL,
-        "description" character varying,
+        "desc"        character varying,
         CONSTRAINT "UQ_roles_name" UNIQUE ("name"),
         CONSTRAINT "PK_roles_id" PRIMARY KEY ("id")
       )`);

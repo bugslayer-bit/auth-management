@@ -5,19 +5,20 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
-  Put,
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { PageDto } from '../../common/dto/page.dto.ts';
-import { UUIDParam } from '../../decorators/http.decorators.ts';
+import { Auth, UUIDParam } from '../../decorators/http.decorators.ts';
 import { CreateRoleDto } from './dto/create-role.dto.ts';
 import { RoleDto } from './dto/role.dto.ts';
 import { RolesPageOptionsDto } from './dto/roles-page-options.dto.ts';
 import { UpdateRoleDto } from './dto/update-role.dto.ts';
 import { RoleService } from './role.service.ts';
+import { RoleType } from '../../constants/role-type.ts';
 
 @Controller('roles')
 @ApiTags('roles')
@@ -25,6 +26,7 @@ export class RoleController {
   constructor(private roleService: RoleService) {}
 
   @Post()
+  @Auth([RoleType.ADMIN])
   @HttpCode(HttpStatus.CREATED)
   async createRole(@Body() createRoleDto: CreateRoleDto): Promise<RoleDto> {
     const entity = await this.roleService.createRole(createRoleDto);
@@ -33,6 +35,7 @@ export class RoleController {
   }
 
   @Get()
+  @Auth([RoleType.ADMIN])
   @HttpCode(HttpStatus.OK)
   getRoles(
     @Query() pageOptionsDto: RolesPageOptionsDto,
@@ -41,6 +44,7 @@ export class RoleController {
   }
 
   @Get(':id')
+  @Auth([RoleType.ADMIN])
   @HttpCode(HttpStatus.OK)
   async getRole(@UUIDParam('id') id: Uuid): Promise<RoleDto> {
     const entity = await this.roleService.getRole(id);
@@ -48,7 +52,8 @@ export class RoleController {
     return entity.toDto();
   }
 
-  @Put(':id')
+  @Patch(':id')
+  @Auth([RoleType.ADMIN])
   @HttpCode(HttpStatus.OK)
   updateRole(
     @UUIDParam('id') id: Uuid,
@@ -58,6 +63,7 @@ export class RoleController {
   }
 
   @Delete(':id')
+  @Auth([RoleType.ADMIN])
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteRole(@UUIDParam('id') id: Uuid): Promise<void> {
     return this.roleService.deleteRole(id);

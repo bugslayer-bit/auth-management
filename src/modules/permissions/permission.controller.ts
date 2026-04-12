@@ -5,19 +5,20 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
-  Put,
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { PageDto } from '../../common/dto/page.dto.ts';
-import { UUIDParam } from '../../decorators/http.decorators.ts';
+import { Auth, UUIDParam } from '../../decorators/http.decorators.ts';
 import { CreatePermissionDto } from './dto/create-permission.dto.ts';
 import { PermissionDto } from './dto/permission.dto.ts';
 import { PermissionsPageOptionsDto } from './dto/permissions-page-options.dto.ts';
 import { UpdatePermissionDto } from './dto/update-permission.dto.ts';
 import { PermissionService } from './permission.service.ts';
+import { RoleType } from '../../constants/role-type.ts';
 
 @Controller('permissions')
 @ApiTags('permissions')
@@ -25,6 +26,7 @@ export class PermissionController {
   constructor(private permissionService: PermissionService) {}
 
   @Post()
+  @Auth([RoleType.ADMIN])
   @HttpCode(HttpStatus.CREATED)
   async createPermission(
     @Body() createPermissionDto: CreatePermissionDto,
@@ -36,6 +38,7 @@ export class PermissionController {
   }
 
   @Get()
+  @Auth([RoleType.ADMIN])
   @HttpCode(HttpStatus.OK)
   getPermissions(
     @Query() pageOptionsDto: PermissionsPageOptionsDto,
@@ -44,6 +47,7 @@ export class PermissionController {
   }
 
   @Get(':id')
+  @Auth([RoleType.ADMIN])
   @HttpCode(HttpStatus.OK)
   async getPermission(@UUIDParam('id') id: Uuid): Promise<PermissionDto> {
     const entity = await this.permissionService.getPermission(id);
@@ -51,7 +55,8 @@ export class PermissionController {
     return entity.toDto();
   }
 
-  @Put(':id')
+  @Patch(':id')
+  @Auth([RoleType.ADMIN])
   @HttpCode(HttpStatus.OK)
   updatePermission(
     @UUIDParam('id') id: Uuid,
@@ -61,6 +66,7 @@ export class PermissionController {
   }
 
   @Delete(':id')
+  @Auth([RoleType.ADMIN])
   @HttpCode(HttpStatus.NO_CONTENT)
   deletePermission(@UUIDParam('id') id: Uuid): Promise<void> {
     return this.permissionService.deletePermission(id);

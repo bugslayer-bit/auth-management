@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository, type FindOptionsWhere } from 'typeorm';
+import { Repository, type FindOptionsWhere } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { PageDto } from '../../common/dto/page.dto.ts';
-import { RoleEntity } from '../roles/role.entity.ts';
+import { UserRoleService } from '../user-roles/user-role.service.ts';
 import { AdminUserEntity } from './admin-user.entity.ts';
 import { CreateAdminUserCommand } from './commands/create-admin-user.command.ts';
 import { AdminUserDto } from './dto/admin-user.dto.ts';
@@ -19,23 +19,33 @@ export class AdminUserService {
   constructor(
     @InjectRepository(AdminUserEntity)
     private adminUserRepository: Repository<AdminUserEntity>,
-    @InjectRepository(RoleEntity)
-    private roleRepository: Repository<RoleEntity>,
+    private userRoleService: UserRoleService,
     private commandBus: CommandBus,
   ) {}
 
-
-  findOne(findData: FindOptionsWhere<AdminUserEntity>): Promise<AdminUserEntity | null> {
-      return this.adminUserRepository.findOneBy(findData);
-    }
+  findOne(
+    findData: FindOptionsWhere<AdminUserEntity>,
+  ): Promise<AdminUserEntity | null> {
+    return this.adminUserRepository.findOneBy(findData);
+  }
 
   @Transactional()
-  createAdminUser(
+  async createAdminUser(
     createAdminUserDto: CreateAdminUserDto,
   ): Promise<AdminUserEntity> {
-    return this.commandBus.execute<CreateAdminUserCommand, AdminUserEntity>(
-      new CreateAdminUserCommand(createAdminUserDto),
-    );
+    const entity = await this.commandBus.execute<
+      CreateAdminUserCommand,
+      AdminUserEntity
+    >(new CreateAdminUserCommand(createAdminUserDto));
+
+    if (createAdminUserDto.roleIds?.length) {
+      await this.userRoleService.replaceUserRoles(
+        entity.id,
+        createAdminUserDto.roleIds,
+      );
+    }
+
+    return entity;
   }
 
   async getAdminUsers(
@@ -43,7 +53,15 @@ export class AdminUserService {
   ): Promise<PageDto<AdminUserDto>> {
     const queryBuilder = this.adminUserRepository
       .createQueryBuilder('adminUser')
-      .leftJoinAndSelect('adminUser.roles', 'role');
+      .leftJoinAndSelect('adminUser.roles', 'roles');
+
+    queryBuilder.searchByString(pageOptionsDto?.q ?? '', [
+        'adminUser.name',
+        'adminUser.username',
+        'adminUser.email',
+        'adminUser.contactNo',
+      ])
+      .orderBy('adminUser.createdAt', pageOptionsDto.order);
     const [items, pageMetaDto] = await queryBuilder.paginate(pageOptionsDto);
 
     return items.toPageDto(pageMetaDto);
@@ -72,11 +90,11 @@ export class AdminUserService {
 
     this.adminUserRepository.merge(entity, rest);
 
-    if (roleIds) {
-      entity.roles = await this.roleRepository.findBy({ id: In(roleIds) });
-    }
-
     await this.adminUserRepository.save(entity);
+
+    if (roleIds) {
+      await this.userRoleService.replaceUserRoles(id, roleIds);
+    }
   }
 
   async deleteAdminUser(id: Uuid): Promise<void> {

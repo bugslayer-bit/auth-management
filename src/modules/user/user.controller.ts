@@ -13,7 +13,6 @@ import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PageDto } from '../../common/dto/page.dto.ts';
 import { RoleType } from '../../constants/role-type.ts';
 import { ApiPageResponse } from '../../decorators/api-page-response.decorator.ts';
-import { AuthUser } from '../../decorators/auth-user.decorator.ts';
 import {
   ApiUUIDParam,
   Auth,
@@ -21,8 +20,7 @@ import {
 } from '../../decorators/http.decorators.ts';
 import { CreateUserDto } from './dtos/create-user.dto.ts';
 import { UserDto } from './dtos/user.dto.ts';
-import type { UsersPageOptionsDto } from './dtos/users-page-options.dto.ts';
-import { UserEntity } from './user.entity.ts';
+import { UsersPageOptionsDto } from './dtos/users-page-options.dto.ts';
 import { UserService } from './user.service.ts';
 
 @Controller('users')
@@ -41,17 +39,8 @@ export class UserController {
     return entity.toDto();
   }
 
-  @Get('admin')
-  @Auth([RoleType.USER])
-  @HttpCode(HttpStatus.OK)
-  async admin(@AuthUser() user: UserEntity) {
-    return {
-      text: `${user.name}`,
-    };
-  }
-
   @Get()
-  @Auth([RoleType.USER])
+  @Auth([RoleType.ADMIN])
   @HttpCode(HttpStatus.OK)
   @ApiPageResponse({
     description: 'Get users list',

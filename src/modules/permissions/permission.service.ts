@@ -32,6 +32,12 @@ export class PermissionService {
   ): Promise<PageDto<PermissionDto>> {
     const queryBuilder =
       this.permissionRepository.createQueryBuilder('permission');
+    queryBuilder.searchByString(pageOptionsDto?.q ?? '', [
+        'permission.name',
+        'permission.subject',
+         'permission.action',
+      ])
+      .orderBy('permission.createdAt', pageOptionsDto.order);
     const [items, pageMetaDto] = await queryBuilder.paginate(pageOptionsDto);
 
     return items.toPageDto(pageMetaDto);
