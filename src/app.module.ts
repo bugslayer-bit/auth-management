@@ -11,6 +11,11 @@ import { HealthCheckerModule } from './modules/health-checker/health-checker.mod
 import { UserModule } from './modules/user/user.module.ts';
 import { ApiConfigService } from './shared/services/api-config.service.ts';
 import { SharedModule } from './shared/shared.module.ts';
+import { AdminUserModule } from './modules/admin-users/admin-user.module.ts';
+import { PermissionModule } from './modules/permissions/permission.module.ts';
+import { RolePermissionModule } from './modules/role-permissions/role-permission.module.ts';
+import { RoleModule } from './modules/roles/role.module.ts';
+import { UserRoleModule } from './modules/user-roles/user-role.module.ts';
 
 @Module({
   imports: [
@@ -50,6 +55,11 @@ import { SharedModule } from './shared/shared.module.ts';
       },
     }),
     HealthCheckerModule,
+    AdminUserModule,
+    RoleModule,
+    PermissionModule,
+    UserRoleModule,
+    RolePermissionModule,
   ],
   providers: [],
 })

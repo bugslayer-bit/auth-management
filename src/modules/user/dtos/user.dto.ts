@@ -1,50 +1,45 @@
 import { AbstractDto } from '../../../common/dto/abstract.dto.ts';
 import { RoleType } from '../../../constants/role-type.ts';
+import { UserStatus } from '../../../constants/user-status.ts';
 import {
-  BooleanFieldOptional,
+  DateFieldOptional,
   EmailFieldOptional,
+  EnumField,
   EnumFieldOptional,
-  PhoneFieldOptional,
   StringFieldOptional,
 } from '../../../decorators/field.decorators.ts';
 import type { UserEntity } from '../user.entity.ts';
 
-// TODO, remove this class and use constructor's second argument's type
-export type UserDtoOptions = Partial<{ isActive: boolean }>;
-
 export class UserDto extends AbstractDto {
   @StringFieldOptional({ nullable: true })
-  firstName?: string | null;
+  name?: string | null;
 
   @StringFieldOptional({ nullable: true })
-  lastName?: string | null;
-
-  @StringFieldOptional({ nullable: true })
-  username!: string;
-
-  @EnumFieldOptional(() => RoleType)
-  role?: RoleType;
+  cidNumber?: string | null;
 
   @EmailFieldOptional({ nullable: true })
   email?: string | null;
 
   @StringFieldOptional({ nullable: true })
-  avatar?: string | null;
+  contactNo?: string | null;
 
-  @PhoneFieldOptional({ nullable: true })
-  phone?: string | null;
+  @EnumField(() => RoleType)
+  roleType!: RoleType;
 
-  @BooleanFieldOptional()
-  isActive?: boolean;
+  @DateFieldOptional({ nullable: true })
+  lastLoggedIn?: Date | null;
 
-  constructor(user: UserEntity, options?: UserDtoOptions) {
+  @EnumFieldOptional(() => UserStatus)
+  status?: UserStatus;
+
+  constructor(user: UserEntity) {
     super(user);
-    this.firstName = user.firstName;
-    this.lastName = user.lastName;
-    this.role = user.role;
+    this.name = user.name;
+    this.cidNumber = user.cidNumber;
     this.email = user.email;
-    this.avatar = user.avatar;
-    this.phone = user.phone;
-    this.isActive = options?.isActive;
+    this.contactNo = user.contactNo;
+    this.roleType = user.roleType;
+    this.lastLoggedIn = user.lastLoggedIn;
+    this.status = user.status;
   }
 }

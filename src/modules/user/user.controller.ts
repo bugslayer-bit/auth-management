@@ -35,7 +35,7 @@ export class UserController {
   async admin(@AuthUser() user: UserEntity) {
 
     return {
-      text: `${user.firstName}`,
+      text: `${user.name}`,
     };
   }
 

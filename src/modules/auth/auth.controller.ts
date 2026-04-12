@@ -5,7 +5,6 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  UploadedFile,
   Version,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
@@ -13,9 +12,6 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { RoleType } from '../../constants/role-type.ts';
 import { AuthUser } from '../../decorators/auth-user.decorator.ts';
 import { Auth } from '../../decorators/http.decorators.ts';
-import { ApiFile } from '../../decorators/swagger.schema.ts';
-import type { IFile } from '../../interfaces/IFile.ts';
-import type { Reference } from '../../types.ts';
 import { UserDto } from '../user/dtos/user.dto.ts';
 import type { UserEntity } from '../user/user.entity.ts';
 import { UserService } from '../user/user.service.ts';
@@ -45,7 +41,7 @@ export class AuthController {
 
     const token = await this.authService.createAccessToken({
       userId: userEntity.id,
-      role: userEntity.role,
+      role: userEntity.roleType,
     });
 
     return new LoginPayloadDto(userEntity.toDto(), token);
@@ -54,19 +50,12 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: UserDto, description: 'Successfully Registered' })
-  @ApiFile({ name: 'avatar' })
   async userRegister(
     @Body() userRegisterDto: UserRegisterDto,
-    @UploadedFile() file?: Reference<IFile>,
   ): Promise<UserDto> {
-    const createdUser = await this.userService.createUser(
-      userRegisterDto,
-      file,
-    );
+    const createdUser = await this.userService.createUser(userRegisterDto);
 
-    return createdUser.toDto({
-      isActive: true,
-    });
+    return createdUser.toDto();
   }
 
   @Version('1')
