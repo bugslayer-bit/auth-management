@@ -126,10 +126,10 @@ export class AuthService {
 
     await this.adminUserRepository.save(adminUser);
 
-    await this.mailService.sendResetPasswordEmail(
-      adminUser.email!,
-      resetToken,
-    );
+    await this.mailService.sendPasswordResetEmail(adminUser.email!, {
+      name: adminUser.name || 'User',
+      code: resetToken,
+    });
   }
 
   async resetAdminPassword(

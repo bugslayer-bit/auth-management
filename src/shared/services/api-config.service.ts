@@ -152,14 +152,14 @@ export class ApiConfigService {
     };
   }
 
-  get smtpConfig() {
+  get emailConfig() {
     return {
       host: this.getString('SMTP_HOST'),
       port: this.getNumber('SMTP_PORT'),
-      user: this.getString('SMTP_USER'),
-      pass: this.getString('SMTP_PASS'),
-      from: this.getString('SMTP_FROM'),
-      fromName: this.getString('SMTP_FROM_NAME'),
+      username: this.getString('SMTP_USER'),
+      password: this.getString('SMTP_PASS'),
+      emailFrom: this.getString('SMTP_FROM'),
+      emailFromName: this.getString('SMTP_FROM_NAME'),
     };
   }
 

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f7; margin: 0; padding: 0; }
+    .container { max-width: 520px; margin: 40px auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .header { background: #1e40af; color: #ffffff; padding: 24px; text-align: center; }
+    .header h1 { margin: 0; font-size: 20px; }
+    .body { padding: 32px 24px; }
+    .body p { color: #374151; font-size: 14px; line-height: 1.6; margin: 0 0 16px; }
+    .credentials { background: #f3f4f6; border-radius: 8px; padding: 20px; margin: 24px 0; }
+    .credentials table { width: 100%; border-collapse: collapse; }
+    .credentials td { padding: 8px 0; font-size: 14px; color: #374151; }
+    .credentials td:first-child { font-weight: 600; width: 120px; }
+    .warning { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 4px; margin: 16px 0; }
+    .warning p { color: #92400e; font-size: 13px; margin: 0; }
+    .footer { background: #f9fafb; padding: 16px 24px; text-align: center; border-top: 1px solid #e5e7eb; }
+    .footer p { color: #9ca3af; font-size: 12px; margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>ERA-RIMS</h1>
+    </div>
+    <div class="body">
+      <p>Hello <strong>{{name}}</strong>,</p>
+      <p>Your ERA-RIMS account has been created. Below are your login credentials:</p>
+      <div class="credentials">
+        <table>
+          <tr>
+            <td>Username</td>
+            <td>{{username}}</td>
+          </tr>
+          <tr>
+            <td>Password</td>
+            <td>{{password}}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="warning">
+        <p>Please change your password immediately after your first login for security.</p>
+      </div>
+    </div>
+    <div class="footer">
+      <p>&copy; 2026 Electricity Regulatory Authority of Bhutan. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>
