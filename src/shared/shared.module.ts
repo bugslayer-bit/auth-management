@@ -10,6 +10,7 @@ import { GeneratorService } from './services/generator.service.ts';
 import { MailService } from './services/mail.service.ts';
 import { ValidatorService } from './services/validator.service.ts';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 const providers: Provider[] = [
   ApiConfigService,
@@ -43,8 +44,26 @@ const providers: Provider[] = [
           },
         },
       }),
+     
       inject: [ApiConfigService],
     }),
+     ClientsModule.registerAsync([
+      {
+        name: 'NATS_SERVICE',
+        useFactory: (configService: ApiConfigService) => {
+          const natsConfig = configService.natsConfig;
+
+          return {
+            transport: Transport.NATS,
+             options: {
+              name: 'NATS_SERVICE',
+              servers: [`nats://${natsConfig.host}:${natsConfig.port}`],
+            },
+          };
+        },
+        inject: [ApiConfigService],
+      },
+    ]),
   ],
   exports: [...providers, CqrsModule],
 })
